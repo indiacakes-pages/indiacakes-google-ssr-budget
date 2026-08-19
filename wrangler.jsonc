@@ -1,0 +1,40 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+
+  "name": "indiacakes-google-ssr-budget",
+
+  "main": "src/index.js",
+
+  "compatibility_date": "2026-08-19",
+
+  /*
+    This Worker must NOT receive public Internet traffic.
+
+    The existing indiacakes-emergent-proxy Worker accesses the exported
+    GoogleSsrBudget class through a Durable Object binding.
+  */
+  "workers_dev": false,
+  "preview_urls": false,
+
+  /*
+    Phase 6.06A Durable Object class declaration.
+
+    Cloudflare uses this declaration to provision a new SQLite-backed
+    Durable Object namespace on first deployment.
+  */
+  "exports": {
+    "GoogleSsrBudget": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    }
+  },
+
+  /*
+    Logging is useful during the initial rollout.
+    No application secrets or origin tokens are required here.
+  */
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}
